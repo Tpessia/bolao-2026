@@ -1,0 +1,53 @@
+definitions:
+  config.HealthDetailedRequest:
+    properties:
+      input:
+        minLength: 3
+        type: string
+    required:
+    - input
+    type: object
+  config.HealthDetailedResponse:
+    properties:
+      status:
+        type: string
+      time:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Bolao 2026
+  version: "1.0"
+paths:
+  /health:
+    get:
+      description: Get server status
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Healthy! 2024-01-01 12:00:00
+          schema:
+            type: string
+      summary: Health Check
+  /health-detailed:
+    post:
+      consumes:
+      - application/json
+      description: Get detailed server status
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/config.HealthDetailedRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/config.HealthDetailedResponse'
+      summary: Health Check Detailed
+swagger: "2.0"
