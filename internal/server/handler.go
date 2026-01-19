@@ -7,7 +7,9 @@ import (
 	"time"
 
 	_ "bolao-2026/docs"
+	"bolao-2026/internal/bet"
 	"bolao-2026/internal/config"
+	match "bolao-2026/internal/match"
 	"bolao-2026/internal/utils"
 
 	httpSwagger "github.com/swaggo/http-swagger/v2"
@@ -55,4 +57,14 @@ func registerHandlers(mux *http.ServeMux) {
 	configService := config.ConfigService{}
 	configHandler := config.ConfigHandler{ConfigService: configService}
 	configHandler.RegisterRoutes(mux)
+
+	// Match
+	matchService := match.MatchService{}
+	matchHandler := match.MatchHandler{MatchService: matchService}
+	matchHandler.RegisterRoutes(mux)
+
+	// Bet
+	betService := bet.BetService{}
+	betHandler := bet.BetHandler{BetService: betService}
+	betHandler.RegisterRoutes(mux)
 }

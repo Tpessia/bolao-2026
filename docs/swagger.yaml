@@ -1,4 +1,15 @@
 definitions:
+  bet.Bet:
+    properties:
+      id:
+        type: string
+      matches:
+        items:
+          $ref: '#/definitions/match.Match'
+        type: array
+      score:
+        type: integer
+    type: object
   config.HealthDetailedRequest:
     properties:
       input:
@@ -14,14 +25,62 @@ definitions:
       time:
         type: string
     type: object
+  match.Match:
+    properties:
+      date:
+        type: string
+      matchType:
+        $ref: '#/definitions/match.MatchType'
+      result:
+        $ref: '#/definitions/match.MatchResult'
+      round:
+        type: integer
+      stadium:
+        type: string
+      teamA:
+        type: string
+      teamB:
+        type: string
+    type: object
+  match.MatchResult:
+    properties:
+      teamAScore:
+        type: integer
+      teamBScore:
+        type: integer
+    type: object
+  match.MatchType:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - MatchTypeGroup
+    - MatchTypeKnockout
 info:
   contact: {}
   title: Bolao 2026
   version: "1.0"
 paths:
+  /bets/{id}:
+    get:
+      parameters:
+      - description: Bet ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/bet.Bet'
+      tags:
+      - Bet
   /health:
     get:
-      description: Get server status
       produces:
       - text/plain
       responses:
@@ -29,12 +88,12 @@ paths:
           description: Healthy! 2024-01-01 12:00:00
           schema:
             type: string
-      summary: Health Check
+      tags:
+      - Config
   /health-detailed:
     post:
       consumes:
       - application/json
-      description: Get detailed server status
       parameters:
       - description: User Data
         in: body
@@ -49,5 +108,19 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/config.HealthDetailedResponse'
-      summary: Health Check Detailed
+      tags:
+      - Config
+  /matches:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/match.Match'
+            type: array
+      tags:
+      - Match
 swagger: "2.0"

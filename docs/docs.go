@@ -15,13 +15,41 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/bets/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Bet"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Bet ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/bet.Bet"
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
-                "description": "Get server status",
                 "produces": [
                     "text/plain"
                 ],
-                "summary": "Health Check",
+                "tags": [
+                    "Config"
+                ],
                 "responses": {
                     "200": {
                         "description": "Healthy! 2024-01-01 12:00:00",
@@ -34,14 +62,15 @@ const docTemplate = `{
         },
         "/health-detailed": {
             "post": {
-                "description": "Get detailed server status",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Health Check Detailed",
+                "tags": [
+                    "Config"
+                ],
                 "parameters": [
                     {
                         "description": "User Data",
@@ -62,9 +91,47 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/matches": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Match"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/match.Match"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "bet.Bet": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "matches": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/match.Match"
+                    }
+                },
+                "score": {
+                    "type": "integer"
+                }
+            }
+        },
         "config.HealthDetailedRequest": {
             "type": "object",
             "required": [
@@ -87,6 +154,54 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "match.Match": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "matchType": {
+                    "$ref": "#/definitions/match.MatchType"
+                },
+                "result": {
+                    "$ref": "#/definitions/match.MatchResult"
+                },
+                "round": {
+                    "type": "integer"
+                },
+                "stadium": {
+                    "type": "string"
+                },
+                "teamA": {
+                    "type": "string"
+                },
+                "teamB": {
+                    "type": "string"
+                }
+            }
+        },
+        "match.MatchResult": {
+            "type": "object",
+            "properties": {
+                "teamAScore": {
+                    "type": "integer"
+                },
+                "teamBScore": {
+                    "type": "integer"
+                }
+            }
+        },
+        "match.MatchType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "x-enum-varnames": [
+                "MatchTypeGroup",
+                "MatchTypeKnockout"
+            ]
         }
     }
 }`

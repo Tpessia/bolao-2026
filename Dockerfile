@@ -10,6 +10,7 @@ COPY go.mod go.sum Makefile .
 RUN make init
 
 COPY . .
+RUN make test
 RUN make build
 
 # FROM scratch

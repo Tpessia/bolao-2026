@@ -16,8 +16,7 @@ func (h *ConfigHandler) RegisterRoutes(mux *http.ServeMux) {
 }
 
 // GetHealth godoc
-// @Summary      Health Check
-// @Description  Get server status
+// @Tags         Config
 // @Produce      plain
 // @Success      200  {string}  string  "Healthy! 2024-01-01 12:00:00"
 // @Router       /health [get]
@@ -27,8 +26,7 @@ func (h *ConfigHandler) GetHealth(w http.ResponseWriter, r *http.Request) {
 }
 
 // PostHealthDetailed godoc
-// @Summary      Health Check Detailed
-// @Description  Get detailed server status
+// @Tags         Config
 // @Accept       json
 // @Produce      json
 // @Param        user  body     HealthDetailedRequest  true  "User Data"
